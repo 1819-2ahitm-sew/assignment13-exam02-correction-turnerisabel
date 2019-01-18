@@ -24,6 +24,7 @@ public class Main {
   static final String BUCHUNGSDATEI = "buchungen.csv";
   static final String ERGEBNISDATEI = "ergebnis.csv";
 
+  static List<BankKonto> konten = new ArrayList<>();
 
   /**
    * Führen Sie die drei Methoden erstelleKonten, fuehreBuchungenDurch und
@@ -31,6 +32,8 @@ public class Main {
    *
    * @param args
    */
+
+
   public static void main(String[] args) {
 
     erstelleKonten(KONTENDATEI);
@@ -55,14 +58,16 @@ public class Main {
         String[] array = line.split(";");
         String kontotyp = array[0];
         String name = array[1];
-        double anfangsBetrag = Integer.parseInt(array[2]);
+        double anfangsBetrag = Double.parseDouble(array[2]);
 
         switch (kontotyp) {
           case "Sparkonto":
             SparKonto sparKonto = new SparKonto(name, anfangsBetrag, ZINSSATZ);
+            konten.add(sparKonto);
             break;
           case "Girokonto":
             GiroKonto giroKonto = new GiroKonto(name, anfangsBetrag, ZINSSATZ);
+            konten.add(giroKonto);
             break;
         }
       }
@@ -124,6 +129,11 @@ public class Main {
      *         nicht gefunden wird
      */
     public static BankKonto findeKontoPerName (String name){
+      for (int i = 0; i < konten.size(); i++) {
+        if (konten.get(i).getName().equals(name)) {
+          return konten.get(i);
+        }
+      }
       return null;
     }
   }
