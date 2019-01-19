@@ -16,11 +16,13 @@ public class GiroKonto extends BankKonto {
 
     @Override
     public void abheben(double betrag){
-
+        kontoStand = kontoStand - betrag;
+        kontoStand = kontoStand - gebuehr;
     }
 
     @Override
     public void einzahlen(double betrag){
         kontoStand = kontoStand - gebuehr;
+        kontoStand = kontoStand + betrag;
     }
 }

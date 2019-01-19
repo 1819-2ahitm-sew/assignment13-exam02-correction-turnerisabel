@@ -35,8 +35,9 @@ public class Main {
 
 
   public static void main(String[] args) {
-
     erstelleKonten(KONTENDATEI);
+    fuehreBuchungenDurch(BUCHUNGSDATEI);
+    schreibeKontostandInDatei(ERGEBNISDATEI);
   }
 
   /**
@@ -93,7 +94,28 @@ public class Main {
      * @param datei BUCHUNGSDATEI
      */
     private static void fuehreBuchungenDurch (String datei){
-      System.out.println("fuehreBuchungenDurch noch nicht implementiert");
+
+      try (Scanner scanner = new Scanner(new FileReader(BUCHUNGSDATEI))) {
+        scanner.nextLine();
+        while (scanner.hasNextLine()){
+          String line = scanner.nextLine();
+          String[] array = line.split(";");
+          String vonKonto = array[0];
+          String aufKonto = array[1];
+          double betrag = Double.parseDouble(array[2]);
+
+          BankKonto bankKonto = findeKontoPerName(vonKonto);
+          bankKonto.abheben(betrag);
+
+          BankKonto bankKonto1 = findeKontoPerName(aufKonto);
+          bankKonto1.einzahlen(betrag);
+        }
+        System.out.println("Buchung der Beträge beendet");
+      }
+
+      catch (FileNotFoundException e){
+        System.err.println(e.getMessage());
+      }
     }
 
     /**
@@ -116,11 +138,22 @@ public class Main {
      * @param datei ERGEBNISDATEI
      */
     private static void schreibeKontostandInDatei (String datei){
-      System.out.println("schreibeKontostandInDatei noch nicht implementiert");
+
+      try (PrintWriter writer = new PrintWriter(new FileWriter(ERGEBNISDATEI))) {
+        for (int i = 0; i < konten.size(); i++) {
+          if (konten.get(i) instanceof SparKonto) {
+            writer.println("Sparkonto;" + konten.get(i).getName() + ";" + konten.get(i).getKontoStand());
+          }else {
+            writer.println("Girokonto;" + konten.get(i).getName() + ";" + konten.get(i).getKontoStand());
+            }
+          }
+        System.out.println("Ausgabe in Ergebnisdatei beendet");
+      }
+      catch (IOException e){
+        System.err.println(e.getMessage());
+      }
     }
 
-    /**
-     */
     /**
      * Durchsuchen Sie die Liste "konten" nach dem ersten Konto mit dem als Parameter
      * übergebenen Namen

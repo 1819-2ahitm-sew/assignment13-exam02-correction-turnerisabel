@@ -18,11 +18,11 @@ public class BankKonto {
     }
 
     public void einzahlen(double betrag) {
-
+        kontoStand = kontoStand + betrag;
     }
 
     public void abheben(double betrag){
-
+        kontoStand = kontoStand - betrag;
     }
 
     public BankKonto(String name, double kontoStand) {
