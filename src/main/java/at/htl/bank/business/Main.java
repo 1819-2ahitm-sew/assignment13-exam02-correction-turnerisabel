@@ -104,6 +104,7 @@ public class Main {
           String aufKonto = array[1];
           double betrag = Double.parseDouble(array[2]);
 
+
           BankKonto bankKonto = findeKontoPerName(vonKonto);
           bankKonto.abheben(betrag);
 
@@ -140,6 +141,7 @@ public class Main {
     private static void schreibeKontostandInDatei (String datei){
 
       try (PrintWriter writer = new PrintWriter(new FileWriter(ERGEBNISDATEI))) {
+        writer.println("kontotyp;name:endbetrag");
         for (int i = 0; i < konten.size(); i++) {
           if (konten.get(i) instanceof SparKonto) {
             writer.println("Sparkonto;" + konten.get(i).getName() + ";" + konten.get(i).getKontoStand());
